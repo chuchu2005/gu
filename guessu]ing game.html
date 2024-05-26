@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            font-size: 20px;
+        }
+        .hidden {
+            background-color: #ccc;
+        }
+        .revealed {
+            background-color: #fff;
+        }
+        .chances {
+            margin: 20px;
+        }
+        .balance {
+            margin: 20px;
+        }
+        #guessForm {
+            margin: 20px;
+        }
+        #guessForm input {
+            width: 40px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guess the Numbers</h1>
+        <div class="row" id="hiddenNumbers">
+            <div class="cell hidden" id="hidden1">?</div>
+            <div class="cell hidden" id="hidden2">?</div>
+            <div class="cell hidden" id="hidden3">?</div>
+        </div>
+        <div class="chances">
+            Chances: <span id="chances">3</span>
+        </div>
+        <div class="balance">
+            Balance: £<span id="balance">10.00</span>
+        </div>
+        <form id="guessForm">
+            <div class="row">
+                <input type="number" id="guess1" min="0" max="9" required>
+                <input type="number" id="guess2" min="0" max="9" required>
+                <input type="number" id="guess3" min="0" max="9" required>
+                <button type="submit">Go</button>
+            </div>
+        </form>
+        <div class="row">
+            <div class="cell revealed">0</div>
+            <div class="cell revealed">1</div>
+            <div class="cell revealed">2</div>
+        </div>
+        <div class="row">
+            <div class="cell revealed">3</div>
+            <div class="cell revealed">4</div>
+            <div class="cell revealed">5</div>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const num1 = Math.floor(Math.random() * 6);
+        const num2 = Math.floor(Math.random() * 6);
+        const num3 = Math.floor(Math.random() * 6);
+        const numbers = [num1, num2, num3];
+        console.log('Generated numbers:', numbers);
+
+        let trialsLeft = 3;
+        let balance = 10.00;
+
+        document.getElementById('guessForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            if (trialsLeft <= 0) {
+                document.getElementById('result').innerText = "No trials left. You've lost the game.";
+                return;
+            }
+
+            const guess1 = parseInt(document.getElementById('guess1').value);
+            const guess2 = parseInt(document.getElementById('guess2').value);
+            const guess3 = parseInt(document.getElementById('guess3').value);
+            const guesses = [guess1, guess2, guess3];
+            
+            let correctCount = 0;
+
+            for (let i = 0; i < numbers.length; i++) {
+                if (numbers[i] === guesses[i]) {
+                    document.getElementById(`hidden${i + 1}`).innerText = guesses[i];
+                    document.getElementById(`hidden${i + 1}`).classList.remove('hidden');
+                    document.getElementById(`hidden${i + 1}`).classList.add('revealed');
+                    correctCount++;
+                }
+            }
+
+            if (correctCount < 3) {
+                trialsLeft--;
+                balance -= 4.00;
+            }
+
+            document.getElementById('chances').innerText = trialsLeft;
+            document.getElementById('balance').innerText = balance.toFixed(2);
+
+            if (correctCount === 0) {
+                document.getElementById('result').innerText = "All three numbers are wrong!";
+            } else if (correctCount < 3) {
+                document.getElementById('result').innerText = `${correctCount} out of 3 numbers are correct.`;
+            } else {
+                document.getElementById('result').innerText = "All numbers are correct. You've won!";
+                document.getElementById('guessForm').querySelector('button').disabled = true;
+            }
+
+            if (trialsLeft <= 0 && correctCount < 3) {
+                document.getElementById('result').innerText += " No trials left. You've lost the game.";
+                document.getElementById('guessForm').querySelector('button').disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
