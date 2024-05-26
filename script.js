@@ -44,4 +44,13 @@ document.getElementById('guessForm').addEventListener('submit', function(event) 
     } else if (correctCount < 3) {
         document.getElementById('result').innerText = `${correctCount} out of 3 numbers are correct.`;
     } else {
-        document.getElementById('result').innerText = "All numbers are
+        document.getElementById('result').innerText = "All numbers are"
+        document.getElementById('result').innerText = "All numbers are correct. You've won!";
+        document.getElementById('guessForm').querySelector('button').disabled = true;
+    }
+
+    if (trialsLeft <= 0 && correctCount < 3) {
+        document.getElementById('result').innerText += " No trials left. You've lost the game.";
+        document.getElementById('guessForm').querySelector('button').disabled = true;
+    }
+});
