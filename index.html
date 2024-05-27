@@ -1,3 +1,6 @@
+Sure, here's the combined HTML file with inline CSS and JavaScript:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +27,7 @@
             align-items: center;
             margin: 5px;
             font-size: 20px;
+            cursor: pointer;
         }
         .hidden {
             background-color: #ccc;
@@ -69,14 +73,14 @@
             </div>
         </form>
         <div class="row">
-            <div class="cell revealed">0</div>
-            <div class="cell revealed">1</div>
-            <div class="cell revealed">2</div>
+            <div class="cell revealed" data-number="0">0</div>
+            <div class="cell revealed" data-number="1">1</div>
+            <div class="cell revealed" data-number="2">2</div>
         </div>
         <div class="row">
-            <div class="cell revealed">3</div>
-            <div class="cell revealed">4</div>
-            <div class="cell revealed">5</div>
+            <div class="cell revealed" data-number="3">3</div>
+            <div class="cell revealed" data-number="4">4</div>
+            <div class="cell revealed" data-number="5">5</div>
         </div>
         <div id="result"></div>
     </div>
@@ -137,6 +141,20 @@
                 document.getElementById('guessForm').querySelector('button').disabled = true;
             }
         });
+
+        // Add event listeners to the clickable number boxes
+        const cells = document.querySelectorAll('.cell.revealed');
+        cells.forEach(cell => {
+            cell.addEventListener('click', function() {
+                const number = parseInt(cell.dataset.number);
+                const guessInputs = document.querySelectorAll('#guessForm input');
+                guessInputs.forEach(input => {
+                    if (input.value === '') {
+                        input.value = number;
+                        return;
+                    }
+                });
+            });
+        });
     </script>
-</body>
-</html>
+</body
