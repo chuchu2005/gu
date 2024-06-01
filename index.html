@@ -102,7 +102,7 @@
             event.preventDefault();
 
             if (trialsLeft <= 0) {
-                document.getElementById('result').innerText = "No trials left. You've lost the game. HINT: THE NUMBERS ARE BETWEEN 0-5";
+                document.getElementById('result').innerText = `No trials left. You've lost the game. HINT: THE NUMBERS ARE BETWEEN 0-5. The correct numbers were: ${numbers.join(', ')}`;
                 return;
             }
 
@@ -140,7 +140,7 @@
             }
 
             if (trialsLeft <= 0 && correctCount < 3) {
-                document.getElementById('result').innerText += " No trials left. You've lost the game. HINT: THE NUMBERS ARE BETWEEN 0-5";
+                document.getElementById('result').innerText += ` No trials left. You've lost the game. HINT: THE NUMBERS ARE BETWEEN 0-5. The correct numbers were: ${numbers.join(', ')}`;
                 document.getElementById('guessForm').querySelector('button').disabled = true;
             }
         });
