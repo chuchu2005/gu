@@ -1,4 +1,3 @@
-HINT: THE NUUMBERS ARE BETWEEN 0-5
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +24,7 @@ HINT: THE NUUMBERS ARE BETWEEN 0-5
             align-items: center;
             margin: 5px;
             font-size: 20px;
+            cursor: pointer;
         }
         .hidden {
             background-color: #ccc;
@@ -63,21 +63,21 @@ HINT: THE NUUMBERS ARE BETWEEN 0-5
         </div>
         <form id="guessForm">
             <div class="row">
-                <input type="number" id="guess1" min="0" max="9" required>
-                <input type="number" id="guess2" min="0" max="9" required>
-                <input type="number" id="guess3" min="0" max="9" required>
+                <input type="number" id="guess1" min="0" max="5" required>
+                <input type="number" id="guess2" min="0" max="5" required>
+                <input type="number" id="guess3" min="0" max="5" required>
                 <button type="submit">Go</button>
             </div>
         </form>
         <div class="row">
-            <div class="cell revealed">0</div>
-            <div class="cell revealed">1</div>
-            <div class="cell revealed">2</div>
+            <div class="cell revealed" onclick="fillInput(0)">0</div>
+            <div class="cell revealed" onclick="fillInput(1)">1</div>
+            <div class="cell revealed" onclick="fillInput(2)">2</div>
         </div>
         <div class="row">
-            <div class="cell revealed">3</div>
-            <div class="cell revealed">4</div>
-            <div class="cell revealed">5</div>
+            <div class="cell revealed" onclick="fillInput(3)">3</div>
+            <div class="cell revealed" onclick="fillInput(4)">4</div>
+            <div class="cell revealed" onclick="fillInput(5)">5</div>
         </div>
         <div id="result"></div>
     </div>
@@ -92,11 +92,17 @@ HINT: THE NUUMBERS ARE BETWEEN 0-5
         let trialsLeft = 3;
         let balance = 10.00;
 
+        function fillInput(num) {
+            if (document.activeElement.id.startsWith('guess')) {
+                document.activeElement.value = num;
+            }
+        }
+
         document.getElementById('guessForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
             if (trialsLeft <= 0) {
-                document.getElementById('result').innerText = "No trials left. You've lost the game.";
+                document.getElementById('result').innerText = "No trials left. You've lost the game. HINT: THE NUMBERS ARE BETWEEN 0-5";
                 return;
             }
 
@@ -134,7 +140,7 @@ HINT: THE NUUMBERS ARE BETWEEN 0-5
             }
 
             if (trialsLeft <= 0 && correctCount < 3) {
-                document.getElementById('result').innerText += " No trials left. You've lost the game.";
+                document.getElementById('result').innerText += " No trials left. You've lost the game. HINT: THE NUMBERS ARE BETWEEN 0-5";
                 document.getElementById('guessForm').querySelector('button').disabled = true;
             }
         });
