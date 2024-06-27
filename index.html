@@ -7,14 +7,34 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
         }
+
+        .container {
+            background-color: #e2e3e5;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
         .row {
             display: flex;
             justify-content: center;
             margin: 10px 0;
         }
+
         .cell {
             width: 50px;
             height: 50px;
@@ -26,48 +46,61 @@
             font-size: 20px;
             cursor: pointer;
         }
+
         .hidden {
-            background-color: #ccc;
+            background-color: #b4c3b9;
         }
+
         .revealed {
-            background-color: #fff;
+            background-color: #c9d2d6;
         }
-        .chances {
-            margin: 20px;
-        }
-        .balance {
-            margin: 20px;
-        }
+
         #guessForm {
-            margin: 20px;
+            margin: 20px 0;
         }
+
         #guessForm input {
             width: 40px;
             margin: 0 5px;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .balance-info {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .correct {
+            background-color: lightgreen;
+        }
+
+        .incorrect {
+            background-color: lightcoral;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Guess the Numbers</h1>
+        <h1>WIN: £50.00</h1>
         <div class="row" id="hiddenNumbers">
             <div class="cell hidden" id="hidden1">?</div>
             <div class="cell hidden" id="hidden2">?</div>
             <div class="cell hidden" id="hidden3">?</div>
-        </div>
-        <div class="chances">
-            Chances: <span id="chances">3</span>
-        </div>
-        <div class="balance">
-            Balance: £<span id="balance">10.00</span>
         </div>
         <form id="guessForm">
             <div class="row">
                 <input type="number" id="guess1" min="0" max="5" required>
                 <input type="number" id="guess2" min="0" max="5" required>
                 <input type="number" id="guess3" min="0" max="5" required>
-                <button type="submit">Go</button>
             </div>
+            <button type="submit">GO</button>
         </form>
         <div class="row">
             <div class="cell revealed" onclick="fillInput(0)">0</div>
@@ -79,9 +112,11 @@
             <div class="cell revealed" onclick="fillInput(4)">4</div>
             <div class="cell revealed" onclick="fillInput(5)">5</div>
         </div>
+        <div class="balance-info">
+            Balance: £<span id="balance">68.00</span> Credit: <span id="chances">4</span> Bet: £4.00
+        </div>
         <div id="result"></div>
     </div>
-
     <script>
         const num1 = Math.floor(Math.random() * 6);
         const num2 = Math.floor(Math.random() * 6);
@@ -89,8 +124,8 @@
         const numbers = [num1, num2, num3];
         console.log('Generated numbers:', numbers);
 
-        let trialsLeft = 3;
-        let balance = 10.00;
+        let trialsLeft = 4;
+        let balance = 68.00;
 
         function fillInput(num) {
             if (document.activeElement.id.startsWith('guess')) {
@@ -102,7 +137,7 @@
             event.preventDefault();
 
             if (trialsLeft <= 0) {
-                document.getElementById('result').innerText = `No trials left. You've lost the game. HINT: THE NUMBERS ARE BETWEEN 0-5. The correct numbers were: ${numbers.join(', ')}`;
+                document.getElementById('result').innerText = `No trials left. You've lost the game. The correct numbers were: ${numbers.join(', ')}`;
                 return;
             }
 
@@ -114,11 +149,14 @@
             let correctCount = 0;
 
             for (let i = 0; i < numbers.length; i++) {
+                const cell = document.getElementById(`hidden${i + 1}`);
                 if (numbers[i] === guesses[i]) {
-                    document.getElementById(`hidden${i + 1}`).innerText = guesses[i];
-                    document.getElementById(`hidden${i + 1}`).classList.remove('hidden');
-                    document.getElementById(`hidden${i + 1}`).classList.add('revealed');
+                    cell.innerText = guesses[i];
+                    cell.classList.remove('hidden');
+                    cell.classList.add('revealed', 'correct');
                     correctCount++;
+                } else {
+                    cell.classList.add('incorrect');
                 }
             }
 
@@ -140,7 +178,7 @@
             }
 
             if (trialsLeft <= 0 && correctCount < 3) {
-                document.getElementById('result').innerText += ` No trials left. You've lost the game. HINT: THE NUMBERS ARE BETWEEN 0-5. The correct numbers were: ${numbers.join(', ')}`;
+                document.getElementById('result').innerText += ` No trials left. You've lost the game. The correct numbers were: ${numbers.join(', ')}`;
                 document.getElementById('guessForm').querySelector('button').disabled = true;
             }
         });
