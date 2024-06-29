@@ -45,6 +45,8 @@
             margin: 5px;
             font-size: 20px;
             cursor: pointer;
+            background-color: #CEE741;
+            border-radius: 5px;
         }
 
         .hidden {
@@ -70,6 +72,13 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            background-color: #CEE741;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #bcd93b;
         }
 
         .balance-info {
@@ -101,6 +110,7 @@
                 <input type="number" id="guess3" min="0" max="5" required>
             </div>
             <button type="submit">GO</button>
+            <button type="button" onclick="resetGame()">Reset</button>
         </form>
         <div class="row">
             <div class="cell revealed" onclick="fillInput(0)">0</div>
@@ -118,19 +128,42 @@
         <div id="result"></div>
     </div>
     <script>
-        const num1 = Math.floor(Math.random() * 6);
-        const num2 = Math.floor(Math.random() * 6);
-        const num3 = Math.floor(Math.random() * 6);
-        const numbers = [num1, num2, num3];
-        console.log('Generated numbers:', numbers);
-
+        let numbers;
         let trialsLeft = 4;
         let balance = 68.00;
 
+        function generateNumbers() {
+            numbers = [Math.floor(Math.random() * 6), Math.floor(Math.random() * 6), Math.floor(Math.random() * 6)];
+            console.log('Generated numbers:', numbers);
+        }
+
+        function resetGame() {
+            trialsLeft = 4;
+            balance = 68.00;
+            generateNumbers();
+            document.getElementById('hidden1').innerText = '?';
+            document.getElementById('hidden2').innerText = '?';
+            document.getElementById('hidden3').innerText = '?';
+            document.getElementById('hidden1').className = 'cell hidden';
+            document.getElementById('hidden2').className = 'cell hidden';
+            document.getElementById('hidden3').className = 'cell hidden';
+            document.getElementById('guess1').value = '';
+            document.getElementById('guess2').value = '';
+            document.getElementById('guess3').value = '';
+            document.getElementById('chances').innerText = trialsLeft;
+            document.getElementById('balance').innerText = balance.toFixed(2);
+            document.getElementById('result').innerText = '';
+            document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = false;
+        }
+
+        generateNumbers();
+
+        let currentInput = 0;
+        const inputs = [document.getElementById('guess1'), document.getElementById('guess2'), document.getElementById('guess3')];
+
         function fillInput(num) {
-            if (document.activeElement.id.startsWith('guess')) {
-                document.activeElement.value = num;
-            }
+            inputs[currentInput].value = num;
+            currentInput = (currentInput + 1) % 3;
         }
 
         document.getElementById('guessForm').addEventListener('submit', function(event) {
@@ -174,12 +207,12 @@
                 document.getElementById('result').innerText = `${correctCount} out of 3 numbers are correct.`;
             } else {
                 document.getElementById('result').innerText = "All numbers are correct. You've won!";
-                document.getElementById('guessForm').querySelector('button').disabled = true;
+                document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = true;
             }
 
             if (trialsLeft <= 0 && correctCount < 3) {
                 document.getElementById('result').innerText += ` No trials left. You've lost the game. The correct numbers were: ${numbers.join(', ')}`;
-                document.getElementById('guessForm').querySelector('button').disabled = true;
+                document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = true;
             }
         });
     </script>
