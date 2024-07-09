@@ -107,9 +107,9 @@
     <div class="container">
         <h1>WIN: £50.00</h1>
         <div class="row" id="hiddenNumbers">
-            <div class="cell hidden" id="hidden1">?</div>
-            <div class="cell hidden" id="hidden2">?</div>
-            <div class="cell hidden" id="hidden3">?</div>
+            <div class="cell hidden" id="hidden1"></div>
+            <div class="cell hidden" id="hidden2"></div>
+            <div class="cell hidden" id="hidden3"></div>
         </div>
         <form id="guessForm">
             <div class="row">
@@ -121,15 +121,17 @@
             <button type="button" onclick="resetGame()">Reset</button>
         </form>
         <button id="betButton" onclick="placeBet()">BET</button>
-        <div class="row keyboard-hidden" id="keyboard">
-            <div class="cell revealed" onclick="fillInput(0)">0</div>
-            <div class="cell revealed" onclick="fillInput(1)">1</div>
-            <div class="cell revealed" onclick="fillInput(2)">2</div>
-        </div>
-        <div class="row keyboard-hidden" id="keyboard">
-            <div class="cell revealed" onclick="fillInput(3)">3</div>
-            <div class="cell revealed" onclick="fillInput(4)">4</div>
-            <div class="cell revealed" onclick="fillInput(5)">5</div>
+        <div id="keyboard" class="keyboard-hidden">
+            <div class="row">
+                <div class="cell revealed" onclick="fillInput(0)">0</div>
+                <div class="cell revealed" onclick="fillInput(1)">1</div>
+                <div class="cell revealed" onclick="fillInput(2)">2</div>
+            </div>
+            <div class="row">
+                <div class="cell revealed" onclick="fillInput(3)">3</div>
+                <div class="cell revealed" onclick="fillInput(4)">4</div>
+                <div class="cell revealed" onclick="fillInput(5)">5</div>
+            </div>
         </div>
         <div class="balance-info">
             Balance: £<span id="balance">68.00</span> Credit: <span id="chances">3</span> Bet: £4.00
@@ -149,9 +151,9 @@
 
         function resetGame() {
             generateNumbers();
-            document.getElementById('hidden1').innerText = '?';
-            document.getElementById('hidden2').innerText = '?';
-            document.getElementById('hidden3').innerText = '?';
+            document.getElementById('hidden1').innerText = '';
+            document.getElementById('hidden2').innerText = '';
+            document.getElementById('hidden3').innerText = '';
             document.getElementById('hidden1').className = 'cell hidden';
             document.getElementById('hidden2').className = 'cell hidden';
             document.getElementById('hidden3').className = 'cell hidden';
