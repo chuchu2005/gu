@@ -93,6 +93,14 @@
         .incorrect {
             background-color: lightcoral;
         }
+
+        .keyboard-hidden {
+            display: none;
+        }
+
+        .keyboard-visible {
+            display: flex;
+        }
     </style>
 </head>
 <body>
@@ -113,12 +121,12 @@
             <button type="button" onclick="resetGame()">Reset</button>
         </form>
         <button id="betButton" onclick="placeBet()">BET</button>
-        <div class="row">
+        <div class="row keyboard-hidden" id="keyboard">
             <div class="cell revealed" onclick="fillInput(0)">0</div>
             <div class="cell revealed" onclick="fillInput(1)">1</div>
             <div class="cell revealed" onclick="fillInput(2)">2</div>
         </div>
-        <div class="row">
+        <div class="row keyboard-hidden" id="keyboard">
             <div class="cell revealed" onclick="fillInput(3)">3</div>
             <div class="cell revealed" onclick="fillInput(4)">4</div>
             <div class="cell revealed" onclick="fillInput(5)">5</div>
@@ -159,6 +167,8 @@
             trialsLeft = 3;
             betPlaced = false;
             document.getElementById('chances').innerText = trialsLeft;
+            document.getElementById('keyboard').classList.add('keyboard-hidden');
+            document.getElementById('keyboard').classList.remove('keyboard-visible');
         }
 
         generateNumbers();
@@ -185,6 +195,8 @@
             document.getElementById('guess2').disabled = false;
             document.getElementById('guess3').disabled = false;
             betPlaced = true;
+            document.getElementById('keyboard').classList.add('keyboard-visible');
+            document.getElementById('keyboard').classList.remove('keyboard-hidden');
         }
 
         document.getElementById('guessForm').addEventListener('submit', function(event) {
@@ -231,9 +243,10 @@
                 document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = true;
                 document.getElementById('betButton').disabled = false;
                 betPlaced = false;
+                return;
             }
 
-            if (trialsLeft <= 0 && correctCount < 3) {
+            if (trialsLeft === 0) {
                 document.getElementById('result').innerText += ` No trials left. You've lost the game. The correct numbers were: ${numbers.join(', ')}`;
                 document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = true;
                 document.getElementById('betButton').disabled = false;
