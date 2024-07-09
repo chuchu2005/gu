@@ -105,13 +105,14 @@
         </div>
         <form id="guessForm">
             <div class="row">
-                <input type="number" id="guess1" min="0" max="5" required>
-                <input type="number" id="guess2" min="0" max="5" required>
-                <input type="number" id="guess3" min="0" max="5" required>
+                <input type="number" id="guess1" min="0" max="5" required disabled>
+                <input type="number" id="guess2" min="0" max="5" required disabled>
+                <input type="number" id="guess3" min="0" max="5" required disabled>
             </div>
-            <button type="submit">GO</button>
+            <button type="submit" disabled>GO</button>
             <button type="button" onclick="resetGame()">Reset</button>
         </form>
+        <button id="betButton" onclick="placeBet()">BET</button>
         <div class="row">
             <div class="cell revealed" onclick="fillInput(0)">0</div>
             <div class="cell revealed" onclick="fillInput(1)">1</div>
@@ -123,14 +124,15 @@
             <div class="cell revealed" onclick="fillInput(5)">5</div>
         </div>
         <div class="balance-info">
-            Balance: £<span id="balance">68.00</span> Credit: <span id="chances">4</span> Bet: £4.00
+            Balance: £<span id="balance">68.00</span> Credit: <span id="chances">3</span> Bet: £4.00
         </div>
         <div id="result"></div>
     </div>
     <script>
         let numbers;
-        let trialsLeft = 4;
+        let trialsLeft = 3;
         let balance = 68.00;
+        let betPlaced = false;
 
         function generateNumbers() {
             numbers = [Math.floor(Math.random() * 6), Math.floor(Math.random() * 6), Math.floor(Math.random() * 6)];
@@ -149,7 +151,14 @@
             document.getElementById('guess2').value = '';
             document.getElementById('guess3').value = '';
             document.getElementById('result').innerText = '';
-            document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = false;
+            document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = true;
+            document.getElementById('betButton').disabled = false;
+            document.getElementById('guess1').disabled = true;
+            document.getElementById('guess2').disabled = true;
+            document.getElementById('guess3').disabled = true;
+            trialsLeft = 3;
+            betPlaced = false;
+            document.getElementById('chances').innerText = trialsLeft;
         }
 
         generateNumbers();
@@ -160,6 +169,22 @@
         function fillInput(num) {
             inputs[currentInput].value = num;
             currentInput = (currentInput + 1) % 3;
+        }
+
+        function placeBet() {
+            if (balance < 4) {
+                document.getElementById('result').innerText = "Insufficient balance to place a bet.";
+                return;
+            }
+
+            balance -= 4;
+            document.getElementById('balance').innerText = balance.toFixed(2);
+            document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = false;
+            document.getElementById('betButton').disabled = true;
+            document.getElementById('guess1').disabled = false;
+            document.getElementById('guess2').disabled = false;
+            document.getElementById('guess3').disabled = false;
+            betPlaced = true;
         }
 
         document.getElementById('guessForm').addEventListener('submit', function(event) {
@@ -191,11 +216,9 @@
 
             if (correctCount < 3) {
                 trialsLeft--;
-                balance -= 4.00;
             }
 
             document.getElementById('chances').innerText = trialsLeft;
-            document.getElementById('balance').innerText = balance.toFixed(2);
 
             if (correctCount === 0) {
                 document.getElementById('result').innerText = "All three numbers are wrong!";
@@ -203,12 +226,18 @@
                 document.getElementById('result').innerText = `${correctCount} out of 3 numbers are correct.`;
             } else {
                 document.getElementById('result').innerText = "All numbers are correct. You've won!";
+                balance += 50;
+                document.getElementById('balance').innerText = balance.toFixed(2);
                 document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = true;
+                document.getElementById('betButton').disabled = false;
+                betPlaced = false;
             }
 
             if (trialsLeft <= 0 && correctCount < 3) {
                 document.getElementById('result').innerText += ` No trials left. You've lost the game. The correct numbers were: ${numbers.join(', ')}`;
                 document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = true;
+                document.getElementById('betButton').disabled = false;
+                betPlaced = false;
             }
         });
     </script>
