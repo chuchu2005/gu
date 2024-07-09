@@ -100,6 +100,8 @@
 
         .keyboard-visible {
             display: flex;
+            flex-direction: column;
+            align-items: center;
         }
     </style>
 </head>
@@ -118,7 +120,6 @@
                 <input type="number" id="guess3" min="0" max="5" required disabled>
             </div>
             <button type="submit" disabled>GO</button>
-            <button type="button" onclick="resetGame()">Reset</button>
         </form>
         <button id="betButton" onclick="placeBet()">BET</button>
         <div id="keyboard" class="keyboard-hidden">
@@ -239,7 +240,7 @@
             } else if (correctCount < 3) {
                 document.getElementById('result').innerText = `${correctCount} out of 3 numbers are correct.`;
             } else {
-                document.getElementById('result').innerText = "All numbers are correct. You've won!";
+                document.getElementById('result').innerText = "Congratulations! All three numbers are correct. You've won £50.00!";
                 balance += 50;
                 document.getElementById('balance').innerText = balance.toFixed(2);
                 document.getElementById('guessForm').querySelector('button[type="submit"]').disabled = true;
